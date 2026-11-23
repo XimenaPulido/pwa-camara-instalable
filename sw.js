@@ -1,5 +1,5 @@
 // Service Worker - Estrategia Cache First
-const NOMBRE_CACHE = 'inspeccion-pwa-v2';
+const NOMBRE_CACHE = 'inspeccion-pwa-v3';
 
 const ARCHIVOS_PRECACHE = [
   './',
@@ -15,7 +15,11 @@ const ARCHIVOS_PRECACHE = [
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(NOMBRE_CACHE)
-      .then((cache) => cache.addAll(ARCHIVOS_PRECACHE))
+      // cache: 'reload' ignora la caché HTTP del navegador (GitHub Pages la guarda 10 min)
+      // para precachear siempre la versión más reciente publicada
+      .then((cache) => cache.addAll(
+        ARCHIVOS_PRECACHE.map((url) => new Request(url, { cache: 'reload' }))
+      ))
       .then(() => self.skipWaiting())
   );
 });

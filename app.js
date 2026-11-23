@@ -41,10 +41,25 @@ if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('./sw.js')
       .then((registro) => {
         console.log('Service Worker registrado con scope:', registro.scope);
+        // Buscar una versión nueva de sw.js cada vez que se abre la app
+        registro.update();
       })
       .catch((error) => {
         console.error('Error al registrar el Service Worker:', error);
       });
+  });
+}
+
+// Cuando un Service Worker nuevo toma el control, recargar una vez
+// para mostrar los archivos de la versión nueva
+let recargandoPorActualizacion = false;
+if ('serviceWorker' in navigator) {
+  // Si no había un SW controlando la página, es la primera visita: no recargar
+  const habiaControlador = !!navigator.serviceWorker.controller;
+  navigator.serviceWorker.addEventListener('controllerchange', () => {
+    if (!habiaControlador || recargandoPorActualizacion) return;
+    recargandoPorActualizacion = true;
+    window.location.reload();
   });
 }
 

@@ -1,5 +1,5 @@
 // Service Worker - Estrategia Cache First
-const NOMBRE_CACHE = 'inspeccion-pwa-v1';
+const NOMBRE_CACHE = 'inspeccion-pwa-v2';
 
 const ARCHIVOS_PRECACHE = [
   './',
